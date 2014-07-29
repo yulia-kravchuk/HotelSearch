@@ -6,9 +6,6 @@ Feature: Select deal
   website (a partners website is the ﬁnal website after you had clicked on “View Deal”, e.g. from
   booking.com or Expedia).
 
-  Background:
-    Given I open Trivago site
-
   Scenario Outline: City suggestions are displayed when searching for a hotel
     Given I start typing city name "<term>"
     Then the list of city suggestions starts from "<city>"

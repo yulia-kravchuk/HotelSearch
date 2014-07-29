@@ -8,7 +8,7 @@ gem install bundle
 
 3. Extract the project into some folder on your disk (or clone git repository).
 
-3. Go to project folder ..\Trivago and run
+3. Go to project folder ..\TestTrivago and run
 bundle install
 selenium install
 

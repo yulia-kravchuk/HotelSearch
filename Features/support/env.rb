@@ -7,8 +7,6 @@ require "selenium"
 
 include RSpec::Expectations
 
-@driver
-
 Before do
   if @driver.nil?
     @driver = Selenium::WebDriver.for :firefox
@@ -23,9 +21,20 @@ Before do
   end
 end
 
+After do
+  unless @driver.nil?
+    @driver.quit
+  end
+  unless @verification_errors.nil? or @verification_errors.empty?
+    puts "\n*********** Errors: #{@verification_errors.inspect}"
+  end
+end
+
 Kernel.at_exit do
   unless @driver.nil?
     @driver.quit
   end
-  @verification_errors.should == []
+  unless @verification_errors.nil?
+    puts "\n*********** Errors: #{@verification_errors.inspect}"
+  end
 end

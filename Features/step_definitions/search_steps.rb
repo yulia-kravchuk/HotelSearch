@@ -1,5 +1,11 @@
-Given(/^I open Trivago site$/) do
+Given(/^I start typing city name "([^"]*)"$/) do |term|
+  @driver.find_element(:id, "js_querystring").clear
+  @driver.find_element(:id, "js_querystring").send_keys "#{term}"
+  @driver.find_element(:xpath, ".//*[@id='js_suggest']/ul/li[1]").click
+end
 
+Then(/^the list of city suggestions starts from "([^"]*)"$/) do |arg|
+  pending
 end
 
 Given /^I search for a hotel in "([^"]*)"$/ do |city|
@@ -33,4 +39,3 @@ end
 When(/^I click search$/) do
   pending
 end
-
