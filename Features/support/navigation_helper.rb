@@ -1,7 +1,4 @@
-require "json"
-require "selenium-webdriver"
-require "rspec"
-include RSpec::Expectations
+
 
 #define instantiateBrowser
 #Firefox browser instantiation
@@ -15,6 +12,7 @@ include RSpec::Expectations
 #end
 
 
+=begin
 describe "Untitled" do
 
   before(:each) do
@@ -75,3 +73,4 @@ describe "Untitled" do
 
   end
 
+=end

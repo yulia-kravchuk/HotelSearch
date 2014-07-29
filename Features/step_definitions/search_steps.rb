@@ -1,7 +1,10 @@
+Given(/^I open Trivago site$/) do
+
+end
+
 Given /^I search for a hotel in "([^"]*)"$/ do |city|
   pending
 end
-
 
 Then(/^the calendar of the search form is closed$/) do
   pending
@@ -31,6 +34,3 @@ When(/^I click search$/) do
   pending
 end
 
-Given(/^I open Trivago site$/) do
-
-end
