@@ -4,11 +4,10 @@ require "selenium-webdriver"
 require "rspec"
 require "cucumber"
 require "selenium"
-require "addressable"
-require "win64-service"
-
 
 include RSpec::Expectations
+
+@driver
 
 Before do
   if @driver.nil?
@@ -25,7 +24,8 @@ Before do
 end
 
 Kernel.at_exit do
-  #@driver.quit
-  @driver.browser.close
+  unless @driver.nil?
+    @driver.quit
+  end
   @verification_errors.should == []
 end
