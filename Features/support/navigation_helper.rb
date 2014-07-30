@@ -74,3 +74,50 @@ describe "Untitled" do
   end
 
 =end
+
+def start_browser
+  if @driver.nil?
+    @driver = Selenium::WebDriver.for :firefox
+  end
+  @base_url = "http://www.trivago.com"
+  @accept_next_alert = true
+  @driver.manage.timeouts.implicit_wait = 30
+  @verification_errors = []
+end
+
+def navigate_to_home_page
+  unless  @driver.current_url.eql?(@base_url)
+    @driver.get(@base_url + "/")
+  end
+end
+
+def close_browser
+  unless @driver.nil?
+    @driver.quit
+  end
+  unless @verification_errors.nil? or @verification_errors.empty?
+    puts "\n*********** Errors: #{@verification_errors.inspect}"
+  end
+end
+
+def type_city_name(term)
+  @driver.find_element(:id, "js_querystring").clear
+  @driver.find_element(:id, "js_querystring").send_keys "#{term}"
+end
+
+def get_city_suggestions
+  @driver.find_elements(:xpath, ".//*[@id='js_suggest']/ul/li").map do |element|
+    [element.attribute('data-title').to_s, element.find_element(:class, "ssg_info").text]
+  end
+end
+
+def select_city_from_dropdown(city, country)
+  @driver.find_element(:xpath, ".//*[@data-title='#{city}']//*[contains(text(),'#{country}')]").click
+
+end
+
+def select_city(city, country)
+  type_city_name(city)
+  select_city_from_dropdown(city, country)
+end
+

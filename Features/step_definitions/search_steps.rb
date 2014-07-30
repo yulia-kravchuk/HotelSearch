@@ -1,15 +1,14 @@
 Given(/^I start typing city name "([^"]*)"$/) do |term|
-  @driver.find_element(:id, "js_querystring").clear
-  @driver.find_element(:id, "js_querystring").send_keys "#{term}"
-  @driver.find_element(:xpath, ".//*[@id='js_suggest']/ul/li[1]").click
+  type_city_name(term)
 end
 
-Then(/^the list of city suggestions starts from "([^"]*)"$/) do |arg|
-  pending
+Then(/^the list of city suggestions starts from "([^"]*)" in "([^"]*)"$/) do |city, country|
+  get_city_suggestions[0][0].should eql(city)
+  get_city_suggestions[0][1].include?(country).should == true
 end
 
-Given /^I search for a hotel in "([^"]*)"$/ do |city|
-  pending
+Given /^I search for a hotel in "([^"]*)" city in "([^"]*)"$/ do |city, country|
+  select_city(city, country)
 end
 
 Then(/^the calendar of the search form is closed$/) do
