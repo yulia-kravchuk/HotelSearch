@@ -1,5 +1,7 @@
 GitHub: https://github.com/yulia-kravchuk/TestTrivago
 
+Prerequisite: Mozilla Firefox is installed.
+
 1. Install Ruby 193 from http://rubyinstaller.org/downloads/ 
 (http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-1.9.3-p545.exe?direct)
 
