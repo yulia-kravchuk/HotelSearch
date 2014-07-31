@@ -11,30 +11,32 @@ Given /^I search for a hotel in "([^"]*)" city in "([^"]*)"$/ do |city, country|
   select_city(city, country)
 end
 
-Then(/^the calendar of the search form is closed$/) do
-  pending
-end
-
-And(/^the hotel result list is displayed$/) do
-  pending
-end
-
-And(/^I select the "([^"]*)" hotel in the list$/) do |arg|
-  pending
-end
-
-When(/^I select the "([^"]*)" deal$/) do |arg|
-  pending
-end
-
-Then(/^the hotel name is available on the partners website$/) do
-  pending
-end
-
 And(/^I select dates of my stay$/) do
-  pending
+  select_date_from((Date.today + 2).to_s)
+  select_date_to((Date.today + 4).to_s)
+  close_calendar
+end
+
+Then(/^the calendar of the search form is closed$/) do
+  calendar_open?.should == false
 end
 
 When(/^I click search$/) do
-  pending
+  click_search
+end
+
+And(/^the hotel result list is displayed$/) do
+  hotel_list_displayed?.should == true
+end
+
+And(/^I select the "([^"]*)" hotel in the list$/) do |number_in_list|
+  select_hotel(number_in_list)
+end
+
+When(/^I select the "([^"]*)" deal$/) do |number_in_list|
+  select_deal(number_in_list)
+end
+
+Then(/^the hotel name is available on the partners website$/) do
+  name_is_on_website
 end

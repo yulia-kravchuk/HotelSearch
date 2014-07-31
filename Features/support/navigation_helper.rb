@@ -1,105 +1,3 @@
-
-
-#define instantiateBrowser
-#Firefox browser instantiation
-#driver = Selenium::WebDriver.for :firefox
-
-#end
-
-#define navigateTo |url|
-#Loading the assertselenium URL
-#driver.navigate.to "http://trivago.com"
-#end
-
-
-=begin
-describe "Untitled" do
-
-  before(:each) do
-    @driver = Selenium::WebDriver.for :firefox
-    @base_url = "http://www.trivago.com/"
-    @accept_next_alert = true
-    @driver.manage.timeouts.implicit_wait = 30
-    @verification_errors = []
-  end
-
-  after(:each) do
-    @driver.quit
-    @verification_errors.should == []
-  end
-
-  it "test_untitled" do
-    @driver.get(@base_url + "/")
-    @driver.find_element(:id, "js_querystring").clear
-    @driver.find_element(:id, "js_querystring").send_keys "Hambur"
-    @driver.find_element(:css, "span.ssg_info").click
-    @driver.find_element(:link, "29").click
-    @driver.find_element(:link, "7").click
-    @driver.find_element(:id, "js_go").click
-  end
-
-  def element_present?(how, what)
-    ${receiver}.find_element(how, what)
-    true
-  rescue Selenium::WebDriver::Error::NoSuchElementError
-    false
-  end
-
-  def alert_present?()
-    ${receiver}.switch_to.alert
-    true
-  rescue Selenium::WebDriver::Error::NoAlertPresentError
-    false
-  end
-
-  def verify(&blk)
-    yield
-  rescue ExpectationNotMetError => ex
-    @verification_errors << ex
-  end
-
-  def close_alert_and_get_its_text(how, what)
-    alert = ${receiver}.switch_to().alert()
-    alert_text = alert.text
-    if (@accept_next_alert) then
-      alert.accept()
-    else
-      alert.dismiss()
-    end
-    alert_text
-  ensure
-    @accept_next_alert = true
-  end
-
-  end
-
-=end
-
-def start_browser
-  if @driver.nil?
-    @driver = Selenium::WebDriver.for :firefox
-  end
-  @base_url = "http://www.trivago.com"
-  @accept_next_alert = true
-  @driver.manage.timeouts.implicit_wait = 30
-  @verification_errors = []
-end
-
-def navigate_to_home_page
-  unless  @driver.current_url.eql?(@base_url)
-    @driver.get(@base_url + "/")
-  end
-end
-
-def close_browser
-  unless @driver.nil?
-    @driver.quit
-  end
-  unless @verification_errors.nil? or @verification_errors.empty?
-    puts "\n*********** Errors: #{@verification_errors.inspect}"
-  end
-end
-
 def type_city_name(term)
   @driver.find_element(:id, "js_querystring").clear
   @driver.find_element(:id, "js_querystring").send_keys "#{term}"
@@ -113,11 +11,58 @@ end
 
 def select_city_from_dropdown(city, country)
   @driver.find_element(:xpath, ".//*[@data-title='#{city}']//*[contains(text(),'#{country}')]").click
-
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
+  wait.until {false}
+  rescue Selenium::WebDriver::Error::TimeOutError
 end
 
 def select_city(city, country)
   type_city_name(city)
   select_city_from_dropdown(city, country)
 end
+
+def select_date_from(date)
+  @driver.find_element(:xpath, ".//*[@id='date_from']").click
+  @driver.find_element(:xpath, ".//*[@data-date='#{date}' and not(contains(@class,'unselectable'))]").click
+end
+
+def select_date_to(date)
+  @driver.find_element(:xpath, ".//*[@id='date_to']").click
+  @driver.find_element(:xpath, ".//*[@data-date='#{date}' and not(contains(@class,'unselectable'))]").click
+end
+
+def close_calendar
+  @driver.find_element(:xpath, ".//*[@id='calendar_breadcrumb']//*[contains(@class,'close_calendar')]").click
+end
+
+def calendar_open?
+  not element_present?(:xpath, ".//*[@id='calendar_container']")
+end
+
+def click_search
+  @driver.find_element(:xpath, ".//*[@id='js_go']").click
+end
+
+def hotel_list_displayed?
+  element_present?(:xpath, ".//*[@id='js_itemlist']")
+end
+
+def select_hotel(number_in_list)
+  @current_hotel = @driver.find_element(:xpath, ".//*[@id='js_itemlist']/li[#{number_in_list}]")
+  @current_hotel.find_element(:xpath, ".//*[contains(@id,'js_button_deals')]").click
+  @current_hotel_name = @current_hotel.find_element(:xpath, ".//*[contains(@id,'jsheadline')]").text.strip
+end
+
+def select_deal(number_in_list)
+  @driver.find_element(:xpath, ".//*[contains(@class,'item_deals js_item_deal')][#{number_in_list}]").click
+end
+
+def name_is_on_website
+  @driver.switch_to.window(@driver.window_handles.last)
+  words = @current_hotel_name.split(" ").map { |s| "contains(text(),'#{s}') and " }
+  @driver.find_element(:xpath, ".//*[#{words.join('').chomp(' and ')}]")
+end
+
+
+
 
