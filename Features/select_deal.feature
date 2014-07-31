@@ -24,6 +24,7 @@ Feature: Select a deal
   Scenario: Search for a hotel in a city with specified dates and select a deal
     Given I search for a hotel in "Hamburg" city in "Germany"
     And I select dates of my stay
+    When I click search
     And I select the "2" hotel in the list
     When I select the "3" deal
     Then the hotel name is available on the partners website

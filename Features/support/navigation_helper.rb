@@ -11,9 +11,6 @@ end
 
 def select_city_from_dropdown(city, country)
   @driver.find_element(:xpath, ".//*[@data-title='#{city}']//*[contains(text(),'#{country}')]").click
-  wait = Selenium::WebDriver::Wait.new(:timeout => 5) # seconds
-  wait.until {false}
-  rescue Selenium::WebDriver::Error::TimeOutError
 end
 
 def select_city(city, country)
@@ -41,6 +38,11 @@ end
 
 def click_search
   @driver.find_element(:xpath, ".//*[@id='js_go']").click
+  wait = Selenium::WebDriver::Wait.new(:timeout => 6) # seconds
+  # needs to be fixed to wait until element is present, did not work so far
+  wait.until {false} #{element_present?(:xpath, ".//*[@id='js_itemlist']/li[1]")}
+rescue Selenium::WebDriver::Error::TimeOutError
+
 end
 
 def hotel_list_displayed?
